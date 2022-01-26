@@ -2,7 +2,7 @@ function Cart() {
   this.movieTickets = {};
   this.currentId = 0;
   console.log("hello");
-
+  this.totalPrice = 0;
 }
 
 Cart.prototype.addTicket = function(ticket) {
@@ -56,11 +56,11 @@ function displayTicketList(cartTicketsList) {
     const ticket = cartTicketsList.findTicket(key);
     console.log("ticket", ticket);
     htmlForTicketInfo += "<li id=" + ticket.id + ">" + ticket.movieName + " " + ticket.time + " " + ticket.age + "</li>";
-
   });
 
   ticketsList.html(htmlForTicketInfo);
 }
+
 function showTicketDetail(ticketId) {
   const ticket = cart.findTicket(ticketId);
   $("#show-ticket").show();
@@ -70,9 +70,14 @@ function showTicketDetail(ticketId) {
   $(".price").html(ticket.price);
 }
 
+function totalPriceDisplay(ticketObj){
+  $("#totalPrice").show();
+  cart.totalPrice += ticketObj.price();
+ // console.log("totla" +cart.totalPrice );
+  $("#totalPrice").html(cart.totalPrice );
+}
 
-function attachEventListner()
-{
+function attachEventListner() {
   $("ul#ticketList").on("click", "li", function() {
     showTicketDetail(this.id);
   });
@@ -91,7 +96,8 @@ $(document).ready(function() {
     let newticket = new Ticket(inputName, inputTime, inputAge);
 
     cart.addTicket(newticket);
-
+    totalPriceDisplay(newticket);
+   
     //const moviePrice = ticket.price();
     //console.log("price" +moviePrice);
     displayTicketList(cart);
